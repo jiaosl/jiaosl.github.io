@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="javaScript, js基础, 作用域">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。 作用域问题JS最容易出现混淆的就是作用域的情况。传统的类C语言,它们的作用域是block-level scope，块级作用域， 花括号就是一个作用域。但是对于JavaScript而言，它的作用域是function-level scope，比如if条件语句，就不算一个独立的作用域: 123">
+<meta name="keywords" content="javaScript, js基础, 作用域">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript基础详解-作用域">
+<meta property="og:url" content="http://jiaosl.com/2017/04/24/javascript基础详解-作用域/index.html">
+<meta property="og:site_name" content="焦双亮">
+<meta property="og:description" content="JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。 作用域问题JS最容易出现混淆的就是作用域的情况。传统的类C语言,它们的作用域是block-level scope，块级作用域， 花括号就是一个作用域。但是对于JavaScript而言，它的作用域是function-level scope，比如if条件语句，就不算一个独立的作用域: 123">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-12T08:45:31.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript基础详解-作用域">
+<meta name="twitter:description" content="JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。 作用域问题JS最容易出现混淆的就是作用域的情况。传统的类C语言,它们的作用域是block-level scope，块级作用域， 花括号就是一个作用域。但是对于JavaScript而言，它的作用域是function-level scope，比如if条件语句，就不算一个独立的作用域: 123">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jiaosl.com/2017/04/24/javascript基础详解-作用域/">
+
+
+
+
+
+  <title>javascript基础详解-作用域 | 焦双亮</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">焦双亮</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://jiaosl.com/2017/04/24/javascript基础详解-作用域/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="焦双亮">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="焦双亮">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javascript基础详解-作用域</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T20:50:07+08:00">
+                2017-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。</p>
+<h2 id="作用域问题"><a href="#作用域问题" class="headerlink" title="作用域问题"></a>作用域问题</h2><p>JS最容易出现混淆的就是作用域的情况。传统的<strong>类C语言</strong>,它们的作用域是<code>block-level scope</code>，块级作用域， 花括号就是一个作用域。但是对于JavaScript而言，它的作用域是<code>function-level scope</code>，比如if条件语句，就不算一个独立的作用域:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var x = 1;</span><br><span class="line">console.log(x); // 1</span><br><span class="line">if (true) &#123;</span><br><span class="line">    var x = 2;</span><br><span class="line">    console.log(x); // 2</span><br><span class="line">&#125;</span><br><span class="line">console.log(x); // 2</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。</p>
+<p>在JavaScript中，如果我们需要实现<code>block-level scope</code>，我们也有一种变通的方式，那就是通过自执行函数创建临时作用域:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    var x = 1;</span><br><span class="line">    if (x) &#123;</span><br><span class="line">        (function () &#123;</span><br><span class="line">            var x = 2;</span><br><span class="line">            // some other code</span><br><span class="line">        &#125;());</span><br><span class="line">    &#125;</span><br><span class="line">    // x is still 1.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="作用域提升"><a href="#作用域提升" class="headerlink" title="作用域提升"></a>作用域提升</h2><h3 id="变量被提升"><a href="#变量被提升" class="headerlink" title="变量被提升"></a>变量被提升</h3><p>对JavaScript解释器而言，所有的函数和变量声明都会被提升到最前面, 并且变量声明永远在前面，赋值在声明过程之后。比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var x = 10;</span><br><span class="line">function x()&#123;&#125;;</span><br><span class="line">console.log(x); // 10</span><br></pre></td></tr></table></figure>
+<p>实际上被解释为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var x;</span><br><span class="line">function x()&#123;&#125;;</span><br><span class="line">x = 10;</span><br><span class="line">console.log(x); // 10</span><br></pre></td></tr></table></figure>
+<h2 id="函数被提升"><a href="#函数被提升" class="headerlink" title="函数被提升"></a>函数被提升</h2><p>函数的声明方式主要由两种：声明式和变量式。</p>
+<p><strong>声明式会自动将声明放在前面并且执行赋值过程。而变量式则是先将声明提升，然后到赋值处再执行赋值。</strong>比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function test() &#123;</span><br><span class="line">    foo(); // TypeError &quot;foo is not a function&quot;</span><br><span class="line">    bar(); // &quot;this will run!&quot;</span><br><span class="line">    var foo = function () &#123; // function expression assigned to local variable &apos;foo&apos;</span><br><span class="line">        alert(&quot;this won&apos;t run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    function bar() &#123; // function declaration, given the name &apos;bar&apos;</span><br><span class="line">        alert(&quot;this will run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p>实际上等价于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function test() &#123;</span><br><span class="line">    var foo;</span><br><span class="line">    var bar;</span><br><span class="line">    bar = function () &#123; // function declaration, given the name &apos;bar&apos;</span><br><span class="line">        alert(&quot;this will run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    foo(); // TypeError &quot;foo is not a function&quot;</span><br><span class="line">    bar(); // &quot;this will run!&quot;</span><br><span class="line"></span><br><span class="line">    foo = function () &#123; // function expression assigned to local variable &apos;foo&apos;</span><br><span class="line">        alert(&quot;this won&apos;t run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p><em>主要注意的地方：</em>带有命名的函数变量式声明，是不会提升到作用域范围内的，比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var baz = function spam() &#123;&#125;;</span><br><span class="line">baz(); // vaild</span><br><span class="line">spam(); // ReferenceError &quot;spam is not defined&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="实战经验"><a href="#实战经验" class="headerlink" title="实战经验"></a>实战经验</h2><p><strong>任何时候，请使用<code>var</code>声明变量, 并放置在作用域的顶端</strong>.</p>
+<p>工具推荐<code>JSLint</code>之类，帮助你验证语法的规范。</p>
+<p>JavaScript语言的作用域仅存在于函数范围中。这是必须要牢记的一点，还有一点重要的就是作用域的提升规则。</p>
+<h2 id="作用域问题-1"><a href="#作用域问题-1" class="headerlink" title="作用域问题"></a>作用域问题</h2><p>JS最容易出现混淆的就是作用域的情况。传统的<strong>类C语言</strong>,它们的作用域是<code>block-level scope</code>，块级作用域， 花括号就是一个作用域。但是对于JavaScript而言，它的作用域是<code>function-level scope</code>，比如if条件语句，就不算一个独立的作用域:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var x = 1;</span><br><span class="line">console.log(x); // 1</span><br><span class="line">if (true) &#123;</span><br><span class="line">    var x = 2;</span><br><span class="line">    console.log(x); // 2</span><br><span class="line">&#125;</span><br><span class="line">console.log(x); // 2</span><br></pre></td></tr></table></figure>
+<p>在JavaScript中，如果我们需要实现<code>block-level scope</code>，我们也有一种变通的方式，那就是通过自执行函数创建临时作用域:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    var x = 1;</span><br><span class="line">    if (x) &#123;</span><br><span class="line">        (function () &#123;</span><br><span class="line">            var x = 2;</span><br><span class="line">            // some other code</span><br><span class="line">        &#125;());</span><br><span class="line">    &#125;</span><br><span class="line">    // x is still 1.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="作用域提升-1"><a href="#作用域提升-1" class="headerlink" title="作用域提升"></a>作用域提升</h2><h3 id="变量被提升-1"><a href="#变量被提升-1" class="headerlink" title="变量被提升"></a>变量被提升</h3><p>对JavaScript解释器而言，所有的函数和变量声明都会被提升到最前面, 并且变量声明永远在前面，赋值在声明过程之后。比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var x = 10;</span><br><span class="line">function x()&#123;&#125;;</span><br><span class="line">console.log(x); // 10</span><br></pre></td></tr></table></figure>
+<p>实际上被解释为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var x;</span><br><span class="line">function x()&#123;&#125;;</span><br><span class="line">x = 10;</span><br><span class="line">console.log(x); // 10</span><br></pre></td></tr></table></figure>
+<h2 id="函数被提升-1"><a href="#函数被提升-1" class="headerlink" title="函数被提升"></a>函数被提升</h2><p>函数的声明方式主要由两种：声明式和变量式。</p>
+<p><strong>声明式会自动将声明放在前面并且执行赋值过程。而变量式则是先将声明提升，然后到赋值处再执行赋值。</strong>比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function test() &#123;</span><br><span class="line">    foo(); // TypeError &quot;foo is not a function&quot;</span><br><span class="line">    bar(); // &quot;this will run!&quot;</span><br><span class="line">    var foo = function () &#123; // function expression assigned to local variable &apos;foo&apos;</span><br><span class="line">        alert(&quot;this won&apos;t run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    function bar() &#123; // function declaration, given the name &apos;bar&apos;</span><br><span class="line">        alert(&quot;this will run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p>实际上等价于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function test() &#123;</span><br><span class="line">    var foo;</span><br><span class="line">    var bar;</span><br><span class="line">    bar = function () &#123; // function declaration, given the name &apos;bar&apos;</span><br><span class="line">        alert(&quot;this will run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    foo(); // TypeError &quot;foo is not a function&quot;</span><br><span class="line">    bar(); // &quot;this will run!&quot;</span><br><span class="line"></span><br><span class="line">    foo = function () &#123; // function expression assigned to local variable &apos;foo&apos;</span><br><span class="line">        alert(&quot;this won&apos;t run!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p><em>主要注意的地方：</em>带有命名的函数变量式声明，是不会提升到作用域范围内的，比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var baz = function spam() &#123;&#125;;</span><br><span class="line">baz(); // vaild</span><br><span class="line">spam(); // ReferenceError &quot;spam is not defined&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="实战经验-1"><a href="#实战经验-1" class="headerlink" title="实战经验"></a>实战经验</h2><p><strong>任何时候，请使用<code>var</code>声明变量, 并放置在作用域的顶端</strong>.</p>
+<p>工具推荐<code>JSLint</code>之类，帮助你验证语法的规范。<br><code>`</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javaScript/" rel="tag"># javaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/20/vim简单操作指南-cheat-sheet/" rel="next" title="vim简单操作指南-cheat sheet">
+                <i class="fa fa-chevron-left"></i> vim简单操作指南-cheat sheet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/25/javascript基础详解-执行环境与作用域链/" rel="prev" title="转 javascript基础详解-执行环境与作用域链">
+                转 javascript基础详解-执行环境与作用域链 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">焦双亮</p>
+              <p class="site-description motion-element" itemprop="description">这是一个前端工作者的个人博客！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域问题"><span class="nav-number">1.</span> <span class="nav-text">作用域问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域提升"><span class="nav-number">2.</span> <span class="nav-text">作用域提升</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量被提升"><span class="nav-number">2.1.</span> <span class="nav-text">变量被提升</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数被提升"><span class="nav-number">3.</span> <span class="nav-text">函数被提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战经验"><span class="nav-number">4.</span> <span class="nav-text">实战经验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域问题-1"><span class="nav-number">5.</span> <span class="nav-text">作用域问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域提升-1"><span class="nav-number">6.</span> <span class="nav-text">作用域提升</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量被提升-1"><span class="nav-number">6.1.</span> <span class="nav-text">变量被提升</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数被提升-1"><span class="nav-number">7.</span> <span class="nav-text">函数被提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战经验-1"><span class="nav-number">8.</span> <span class="nav-text">实战经验</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">焦双亮</span>
+
+  
+</div>
+
+
+  <div class="powered-by"><a href="http://www.miitbeian.gov.cn" rel="external nofollow" target="_blank">豫ICP备17016295号-1</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="css3,渐变,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转自:csdn 圆角，大家一定都会做，border-radius, 内凹圆角如何实现？ 可以拿个白色圆盒子盖住方形盒子的大半边实现，但是这样，是不透明的，背景发生改变时，就要改遮盖盒子的颜色，或者背景是渐变，改起来更麻烦，或背景是图片等等，就直接不太好改了，这种方法就有局限性。 说白了就是遮盖的那部分不透明以后，自适应性不强。 这里介绍一个用径向渐变实现的内凹圆角，可以解决上述问题。可以用CSS生">
+<meta name="keywords" content="css3,渐变">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS3 黑科技 - 内凹圆角 - 径向渐变实现">
+<meta property="og:url" content="http://jiaosl.com/2017/06/01/CSS3-黑科技-内凹圆角-径向渐变实现/index.html">
+<meta property="og:site_name" content="焦双亮">
+<meta property="og:description" content="转自:csdn 圆角，大家一定都会做，border-radius, 内凹圆角如何实现？ 可以拿个白色圆盒子盖住方形盒子的大半边实现，但是这样，是不透明的，背景发生改变时，就要改遮盖盒子的颜色，或者背景是渐变，改起来更麻烦，或背景是图片等等，就直接不太好改了，这种方法就有局限性。 说白了就是遮盖的那部分不透明以后，自适应性不强。 这里介绍一个用径向渐变实现的内凹圆角，可以解决上述问题。可以用CSS生">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-12T08:45:31.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS3 黑科技 - 内凹圆角 - 径向渐变实现">
+<meta name="twitter:description" content="转自:csdn 圆角，大家一定都会做，border-radius, 内凹圆角如何实现？ 可以拿个白色圆盒子盖住方形盒子的大半边实现，但是这样，是不透明的，背景发生改变时，就要改遮盖盒子的颜色，或者背景是渐变，改起来更麻烦，或背景是图片等等，就直接不太好改了，这种方法就有局限性。 说白了就是遮盖的那部分不透明以后，自适应性不强。 这里介绍一个用径向渐变实现的内凹圆角，可以解决上述问题。可以用CSS生">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jiaosl.com/2017/06/01/CSS3-黑科技-内凹圆角-径向渐变实现/">
+
+
+
+
+
+  <title>CSS3 黑科技 - 内凹圆角 - 径向渐变实现 | 焦双亮</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">焦双亮</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://jiaosl.com/2017/06/01/CSS3-黑科技-内凹圆角-径向渐变实现/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="焦双亮">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="焦双亮">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CSS3 黑科技 - 内凹圆角 - 径向渐变实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-01T23:30:46+08:00">
+                2017-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/css3/" itemprop="url" rel="index">
+                    <span itemprop="name">css3</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>转自:<a href="http://blog.csdn.net/qq_16415157/article/details/52818993" target="_blank" rel="noopener">csdn</a></p>
+<p>圆角，大家一定都会做，border-radius, 内凹圆角如何实现？</p>
+<p>可以拿个白色圆盒子盖住方形盒子的大半边实现，但是这样，是不透明的，背景发生改变时，就要改遮盖盒子的颜色，或者背景是渐变，改起来更麻烦，或背景是图片等等，就直接不太好改了，这种方法就有局限性。 说白了就是遮盖的那部分不透明以后，自适应性不强。</p>
+<p>这里介绍一个用径向渐变实现的内凹圆角，可以解决上述问题。可以用CSS生成一个背景透明的内凹圆角。<br><a id="more"></a></p>
+<h2 id="1-基本线性渐变"><a href="#1-基本线性渐变" class="headerlink" title="1. 基本线性渐变"></a>1. 基本线性渐变</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">div &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 200px;</span><br><span class="line">    background-image: linear-gradient(90deg, red, blue);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div&gt;从左到右的红到蓝渐变&lt;/div&gt;1</span><br></pre></td></tr></table></figure>
+<h2 id="2-加百分比调整渐变范围"><a href="#2-加百分比调整渐变范围" class="headerlink" title="2. 加百分比调整渐变范围"></a>2. 加百分比调整渐变范围</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">div &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 200px;</span><br><span class="line">    background-image: linear-gradient(90deg, red 20%, blue 80%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="3-浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块"><a href="#3-浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块" class="headerlink" title="3. 浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块"></a>3. 浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">div &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 200px;</span><br><span class="line">    background-image: linear-gradient(90deg, red 50%, blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-颜色是可以设置透明色的，transparent-将红色改成透明色，可以看到只有蓝色的色块了。"><a href="#4-颜色是可以设置透明色的，transparent-将红色改成透明色，可以看到只有蓝色的色块了。" class="headerlink" title="4. 颜色是可以设置透明色的，transparent, 将红色改成透明色，可以看到只有蓝色的色块了。"></a>4. 颜色是可以设置透明色的，transparent, 将红色改成透明色，可以看到只有蓝色的色块了。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">div &#123;</span><br><span class="line">   height: 100px;</span><br><span class="line">   width: 200px;</span><br><span class="line">   background-image: linear-gradient(90deg, transparent 50%, blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="5-同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。"><a href="#5-同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。" class="headerlink" title="5. 同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。"></a>5. 同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/* 径向渐变主体 */</span><br><span class="line"></span><br><span class="line">.raidal &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&apos;raidal&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="6-径向渐变是可以设置半径圆心位置的，所以设到左顶角，left-top-调整半径大小为-200px，就发现背景透明的内凹圆角实现了。"><a href="#6-径向渐变是可以设置半径圆心位置的，所以设到左顶角，left-top-调整半径大小为-200px，就发现背景透明的内凹圆角实现了。" class="headerlink" title="6. 径向渐变是可以设置半径圆心位置的，所以设到左顶角，left top 调整半径大小为 200px，就发现背景透明的内凹圆角实现了。"></a>6. 径向渐变是可以设置半径圆心位置的，所以设到左顶角，left top 调整半径大小为 200px，就发现背景透明的内凹圆角实现了。</h2><p>应用时可以用伪元素设置，然后用绝对定位，子绝父相，调整位置，组合成想要的效果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* 径向渐变主体 */</span><br><span class="line">.raidal1 &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px at left top,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&apos;raidal1&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="7-同理四个方向-调整圆心位置即可"><a href="#7-同理四个方向-调整圆心位置即可" class="headerlink" title="7. 同理四个方向, 调整圆心位置即可"></a>7. 同理四个方向, 调整圆心位置即可</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/* 左上 */</span><br><span class="line">.raidal1 &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px at left top,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 右上 */</span><br><span class="line">.raidal2 &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px at right top,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 右下 */</span><br><span class="line">.raidal3 &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px at right bottom,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/* 左下 */</span><br><span class="line">.raidal4 &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px at left bottom,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&apos;raidal1&apos;&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&apos;raidal2&apos;&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&apos;raidal3&apos;&gt;&lt;/div&gt;</span><br><span class="line">&lt;div class=&apos;raidal4&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="8-同样，不想这么圆角，也是可以椭圆的，半径设两个参数-就是椭圆。"><a href="#8-同样，不想这么圆角，也是可以椭圆的，半径设两个参数-就是椭圆。" class="headerlink" title="8. 同样，不想这么圆角，也是可以椭圆的，半径设两个参数, 就是椭圆。"></a>8. 同样，不想这么圆角，也是可以椭圆的，半径设两个参数, 就是椭圆。</h2><p>径向渐变有很多参数大家可以自己再尝试调整，可以出现各种奇怪的形状，这里就不演示了。相对来说，内凹圆角就够用了</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/* 左上 */</span><br><span class="line">.ellipse &#123;</span><br><span class="line">    height: 100px;</span><br><span class="line">    width: 100px;</span><br><span class="line">    background:radial-gradient(200px 300px at left top,transparent 50%,blue 50%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css3/" rel="tag"># css3</a>
+          
+            <a href="/tags/渐变/" rel="tag"># 渐变</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/20/css3 渐变/" rel="next" title="css3 渐变">
+                <i class="fa fa-chevron-left"></i> css3 渐变
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/13/正则详解/" rel="prev" title="正则详解">
+                正则详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">焦双亮</p>
+              <p class="site-description motion-element" itemprop="description">这是一个前端工作者的个人博客！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基本线性渐变"><span class="nav-number">1.</span> <span class="nav-text">1. 基本线性渐变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-加百分比调整渐变范围"><span class="nav-number">2.</span> <span class="nav-text">2. 加百分比调整渐变范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块"><span class="nav-number">3.</span> <span class="nav-text">3. 浓缩渐变范围，直至重合，形成一个红蓝分隔的两个色块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-颜色是可以设置透明色的，transparent-将红色改成透明色，可以看到只有蓝色的色块了。"><span class="nav-number">4.</span> <span class="nav-text">4. 颜色是可以设置透明色的，transparent, 将红色改成透明色，可以看到只有蓝色的色块了。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。"><span class="nav-number">5.</span> <span class="nav-text">5. 同理联想到径向渐变，同样缩小渐变圈，直至重合，靠近圆心的颜色设成transparent。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-径向渐变是可以设置半径圆心位置的，所以设到左顶角，left-top-调整半径大小为-200px，就发现背景透明的内凹圆角实现了。"><span class="nav-number">6.</span> <span class="nav-text">6. 径向渐变是可以设置半径圆心位置的，所以设到左顶角，left top 调整半径大小为 200px，就发现背景透明的内凹圆角实现了。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-同理四个方向-调整圆心位置即可"><span class="nav-number">7.</span> <span class="nav-text">7. 同理四个方向, 调整圆心位置即可</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-同样，不想这么圆角，也是可以椭圆的，半径设两个参数-就是椭圆。"><span class="nav-number">8.</span> <span class="nav-text">8. 同样，不想这么圆角，也是可以椭圆的，半径设两个参数, 就是椭圆。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">焦双亮</span>
+
+  
+</div>
+
+
+  <div class="powered-by"><a href="http://www.miitbeian.gov.cn" rel="external nofollow" target="_blank">豫ICP备17016295号-1</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
